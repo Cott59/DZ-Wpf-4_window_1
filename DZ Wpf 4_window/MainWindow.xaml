@@ -1,0 +1,95 @@
+﻿<Window x:Class="DZ_Wpf_4_window.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DZ_Wpf_4_window" 
+        
+        mc:Ignorable="d"
+        Icon="Images\icon.png"
+        Background="#FFFDFAF1"
+        Title="Список дел" Height="450" Width="400">
+    <Window.Resources>
+        <Style TargetType="ListBoxItem" x:Key="ContainerStyle">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="FontWeight" Value="DemiBold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--<Style TargetType="TextBlock" x:Key="ColorData">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Date, Converter={StaticResource LessDayConverter}}" Value="True">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>-->
+        <!--<local:DataTimeLessDayConverter x:Key="LessDayConverter"/>-->
+    </Window.Resources>
+    
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50px"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Style="{StaticResource HeaderStyle}" FontSize="26" TextAlignment="Left" Margin="12">Список дел</TextBlock>
+
+        <Button HorizontalAlignment="Right"  MaxWidth="50" Margin="12" Padding="12 0" 
+                Background="#5EBEC4" Grid.Column="1" Grid.Row="0" Click="OpenWindow">
+            <Image Source="/Images/add.png" Width="20" Height="15" />
+        </Button>
+
+        <ListBox  Grid.Row="1" Grid.ColumnSpan="2" Margin="12 0" Name="listToDo"  Background="#FDF5DF" VerticalAlignment="Top" 
+                  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"  ItemContainerStyle="{StaticResource ContainerStyle}">
+          <ListBox.ItemTemplate >
+             <DataTemplate  >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20px"/>
+                        <RowDefinition Height="20px"/>
+                    </Grid.RowDefinitions>
+
+                    <CheckBox Grid.Column="0" Grid.Row="0" Name="checkToDo" IsChecked="{Binding Done}" Checked="CheckBox_Checked" 
+                              HorizontalAlignment="Center" VerticalAlignment="Center"  Unchecked="CheckBox_Unchecked"></CheckBox>
+                         <!--название дела-->
+                    <TextBlock x:Name="textToDo" Grid.Column="1" Style="{StaticResource  StyleListToDo}" Grid.Row="0" VerticalAlignment="Center" Text="{Binding TitleToDo}"/>
+                         <!--Дата-->
+                    <TextBlock x:Name="textBlock" Grid.Column="2" Grid.Row="0" Margin="10"  FontSize="15" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                               Text="{Binding Path=Date, StringFormat=dd.MM.yyyy}" />
+                         <!--кнопка удаления-->
+                    <Button Grid.Column="3" Grid.Row="0" Click="DeleteJob"  Name="DelJob" Background="#5EbEC4" BorderThickness="0">
+                            <Image Source="Images/delete.png" Width="10" Height="15"/>
+                    </Button>
+                        <!--содержание/информация--> 
+                    <TextBlock  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"    VerticalAlignment="Center" Text="{Binding Description}" FontSize="12"></TextBlock>
+                               
+                </Grid>
+             </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!--прогрессбар-->
+        <ProgressBar Foreground="#5EBEC4" Grid.Row="2" Grid.ColumnSpan="2" Margin="12" 
+                     Minimum="0" Maximum="{Binding Path=ToDoList.Count, Mode=OneWay}" 
+                     Value="{Binding CountDone, Mode=OneWay}"/>
+
+        <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding Path=CountDone, Mode=OneWay}"></TextBlock>
+            <TextBlock Text=" / "></TextBlock>
+            <TextBlock Text="{Binding Path=TodoList.Count, Mode=OneWay}"></TextBlock>
+        </WrapPanel>
+
+    </Grid>
+</Window>
